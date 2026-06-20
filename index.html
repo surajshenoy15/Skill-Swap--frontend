@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skill Swap — Trade What You Know</title>
+
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+
+<!-- ===================== AUTH SCREEN ===================== -->
+<div id="auth-screen" class="screen">
+  <div class="auth-wrap">
+    <div class="auth-brand">
+      <svg class="brand-mark" viewBox="0 0 48 48" fill="none">
+        <path d="M14 24c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M34 24c0 5.5-4.5 10-10 10S14 29.5 14 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="3 4"/>
+        <circle cx="14" cy="24" r="3" fill="currentColor"/>
+        <circle cx="34" cy="24" r="3" fill="currentColor"/>
+      </svg>
+      <div>
+        <h1>Skill Swap</h1>
+        <p class="tagline">Trade a skill. Learn a skill. No money involved.</p>
+      </div>
+    </div>
+
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Sign In</button>
+        <button class="auth-tab" data-tab="register">Register</button>
+      </div>
+
+      <form id="login-form" class="auth-form active">
+        <label>Email
+          <input type="email" id="login-email" required placeholder="you@example.com" />
+        </label>
+
+        <label>Password
+          <input type="password" id="login-password" required placeholder="••••••••" />
+        </label>
+
+        <p class="form-error" id="login-error"></p>
+
+        <button type="submit" class="btn-primary">Sign In</button>
+      </form>
+
+      <form id="register-form" class="auth-form">
+        <label>Full Name
+          <input type="text" id="reg-name" required placeholder="Jordan Lee" />
+        </label>
+
+        <label>Email
+          <input type="email" id="reg-email" required placeholder="you@example.com" />
+        </label>
+
+        <label>Password
+          <input type="password" id="reg-password" required placeholder="At least 6 characters" />
+        </label>
+
+        <div class="field-row">
+          <label>Skill I Offer
+            <input type="text" id="reg-offered" required placeholder="e.g. Guitar" />
+          </label>
+
+          <label>Skill I Want
+            <input type="text" id="reg-wanted" required placeholder="e.g. Spanish" />
+          </label>
+        </div>
+
+        <label>Short Bio <span class="optional">optional</span>
+          <textarea id="reg-bio" rows="2" placeholder="A line about yourself"></textarea>
+        </label>
+
+        <p class="form-error" id="register-error"></p>
+
+        <button type="submit" class="btn-primary">Create Account</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== APP SCREEN ===================== -->
+<div id="app-screen" class="screen app-layout" style="display:none;">
+
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <svg class="brand-mark small" viewBox="0 0 48 48" fill="none">
+        <path d="M14 24c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M34 24c0 5.5-4.5 10-10 10S14 29.5 14 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="3 4"/>
+        <circle cx="14" cy="24" r="3" fill="currentColor"/>
+        <circle cx="34" cy="24" r="3" fill="currentColor"/>
+      </svg>
+      <span class="brand-word">Skill Swap</span>
+    </div>
+
+    <div class="me-card" id="me-card">
+      <!-- filled by JS -->
+    </div>
+
+    <div class="sidebar-section-label">
+      <span>Members</span>
+      <span class="count-badge" id="member-count">0</span>
+    </div>
+
+    <div class="user-list" id="user-list">
+      <!-- user items injected here -->
+    </div>
+
+    <button id="logout-btn" class="btn-ghost logout-btn">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16 17l5-5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Sign Out
+    </button>
+  </aside>
+
+  <main class="chat-area">
+    <div id="chat-empty" class="chat-empty">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M14 20a6 6 0 0 1 6-6h24a6 6 0 0 1 6 6v16a6 6 0 0 1-6 6H28l-10 8v-8h-4a6 6 0 0 1-6-6V20z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+      <h3>Choose someone to trade with</h3>
+      <p>Pick a member from the list. Match what you offer with what they want.</p>
+    </div>
+
+    <div id="chat-active" class="chat-active" style="display:none;">
+      <header class="chat-header">
+        <div class="chat-partner-info">
+          <div class="avatar" id="partner-avatar"></div>
+          <div>
+            <h3 id="partner-name"></h3>
+            <div class="skill-pills" id="partner-skills"></div>
+          </div>
+        </div>
+
+        <div class="conn-status" id="conn-status">
+          <span class="conn-dot"></span> Live
+        </div>
+      </header>
+
+      <div class="messages" id="messages"></div>
+
+      <form id="message-form" class="message-form">
+        <input type="text" id="message-input" placeholder="Write a message…" autocomplete="off" />
+
+        <button type="submit" class="send-btn" aria-label="Send">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M22 2L15 22l-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </main>
+</div>
+
+<script src="./config.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>
